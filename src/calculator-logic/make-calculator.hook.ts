@@ -8,6 +8,7 @@ import {
   Handle,
   Key,
   KeyType,
+  Render,
 } from "./types";
 
 export const makeCalculator: CalculatorHook = (...handlers) => () => {
@@ -36,13 +37,34 @@ export const makeCalculator: CalculatorHook = (...handlers) => () => {
 
       setStore(updatedStore);
     },
-    [store, buffer]
+    [store, buffer, error]
+  );
+
+  const render = useCallback<Render>(
+    () =>
+      store
+        .map((item) => {
+          if (item.type === KeyType.number) {
+            const key = Number.parseFloat(item.key);
+
+            if (key < 0) {
+              return `(${key})`;
+            }
+
+            return key;
+          }
+
+          return item.key;
+        })
+        .join(""),
+    [store]
   );
 
   return {
     handle,
     store,
     buffer,
+    render,
     error,
   };
 };

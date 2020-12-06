@@ -28,11 +28,13 @@ export type Handler = (
 export type Buffer = string | null | undefined;
 export type Error = string | null;
 export type Handle = (key: Key | number) => void;
+export type Render = () => string;
 
 export type CalculatorHookInterface = {
   handle: Handle;
   store: CalculationSequence;
   buffer: Buffer;
+  render: Render;
   error: Error;
 };
 export type CalculatorHook = (
