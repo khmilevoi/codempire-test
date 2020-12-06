@@ -11,6 +11,7 @@ export enum KeyType {
 export type CalculationItem = {
   type: KeyType;
   key: Key;
+  modifier?: string;
 };
 
 export type CalculationSequence = CalculationItem[];
@@ -26,15 +27,13 @@ export type Handler = (
 // calculator
 
 export type Buffer = string | null | undefined;
-export type Error = string | null;
+export type Error = string | null | undefined;
 export type Handle = (key: Key | number) => void;
-export type Render = () => string;
 
 export type CalculatorHookInterface = {
   handle: Handle;
   store: CalculationSequence;
   buffer: Buffer;
-  render: Render;
   error: Error;
 };
 export type CalculatorHook = (

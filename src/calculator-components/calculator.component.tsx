@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Dimensions, StatusBar } from "react-native";
 import { useCalculator } from "../calculator-logic/calculator-instance.hook";
+import { KeyType } from "../calculator-logic/types";
 import { ButtonColors, ButtonSize } from "../shared/constants";
 import { ButtonsWrapper, CalculatorContainer } from "../styles/calculator";
 import { Button } from "./button.component";
@@ -26,9 +27,32 @@ export const Calculator = () => {
     setDisplayHeight(Math.floor(win.height - win.width / 0.66));
   }, []);
 
-  const { handle, render } = useCalculator();
+  const { handle, store } = useCalculator();
 
-  const content = useMemo(render, [render]);
+  const content = useMemo(
+    () =>
+      store
+        .map((item) => {
+          if (item.type === KeyType.number) {
+            const key = Number.parseFloat(item.key);
+            let keyString = key.toString();
+
+            if (item.modifier === "percent") {
+              keyString += "%";
+            }
+
+            if (key < 0) {
+              keyString = `(${keyString})`;
+            }
+
+            return keyString;
+          }
+
+          return item.key;
+        })
+        .join(""),
+    [store]
+  );
 
   return (
     <CalculatorContainer>

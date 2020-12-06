@@ -52,7 +52,7 @@ describe("calculator", () => {
   it("should add actions to sequence", function () {
     const { result } = renderHook(() => useCalculator());
 
-    const actions = ["2", "-", "+", "/", "*", "%"];
+    const actions = ["2", "-", "+", "/", "*", "+"];
 
     actions.forEach((action) => {
       act(() => {
@@ -73,8 +73,8 @@ describe("calculator", () => {
   it("should add item to sequence", function () {
     const { result } = renderHook(() => useCalculator());
 
-    const actions = ["1", "+", "-", "3", "2", "-", "3", "/", "%", "8", "2"];
-    const expected = ["1", "-", "32", "-", "3", "%", "82"];
+    const actions = ["1", "+", "-", "3", "2", "-", "3", "/", "+", "8", "2"];
+    const expected = ["1", "-", "32", "-", "3", "+", "82"];
 
     actions.forEach((action) => {
       act(() => {
@@ -97,7 +97,7 @@ describe("calculator", () => {
       [["32", "+", "98", "*", "42", "-", "23", "/", "5"], "4143.4"],
       [["2", "*", "3", "*", "4", "*", "21", "-", "1000"], "-496"],
       [["2", "*", "3", "*", "4", "-", "21", "-", "1000"], "-997"],
-      [["2", "*", "3", "%", "4", "-", "21", "-", "1000"], "-1019"],
+      [["2", "*", "3", "+", "4", "-", "21", "-", "1000"], "-1011"],
     ] as [string[], string][];
 
     handleExpressions(expressions, result);
@@ -139,6 +139,46 @@ describe("calculator", () => {
     const expressions = [
       [["*", "3"], "3"],
       [["*", "+", "=", "3"], "3"],
+    ] as [string[], string][];
+
+    handleExpressions(expressions, result);
+  });
+
+  it("should add dot", function () {
+    const { result } = renderHook(() => useCalculator());
+
+    const expressions = [
+      [["3", "."], "3"],
+      [["3", ".", "1", "4"], "3.14"],
+      [["3", ".", "1", "4", "+", "4", ".", "*", "2"], "11.14"],
+    ] as [string[], string][];
+
+    handleExpressions(expressions, result);
+  });
+
+  it("should correctly work with percent", function () {
+    const { result } = renderHook(() => useCalculator());
+
+    act(() => {
+      result.current.handle("50");
+    });
+    act(() => {
+      result.current.handle("%");
+    });
+
+    const [last] = result.current.store;
+
+    expect(last.modifier).toBe("percent");
+
+    const expressions = [
+      [["50", "%"], "0.5"],
+      [["10", "+", "50", "%"], "15"],
+      [["10", "+", "5", "*", "2", "+", "40", "%", "+", "2"], "30"],
+      [["10", "+", "5", "*", "2", "*", "40", "%", "+", "2"], "16"],
+      [["50", "%", "tsign"], "-0.5"],
+      [["10", "+", "50", "%", "tsign"], "5"],
+      [["10", "+", "5", "*", "2", "+", "40", "%", "tsign", "+", "2"], "14"],
+      [["10", "+", "5", "*", "2", "*", "40", "%", "tsign", "+", "2"], "8"],
     ] as [string[], string][];
 
     handleExpressions(expressions, result);

@@ -18,7 +18,7 @@ export const useCalculator = makeCalculator(
       buffer,
     };
   }),
-  makeKeyHandler(/^\+|-|\/|\*|%$/, (item, store, buffer) => {
+  makeKeyHandler(/^\+|-|\/|\*$/, (item, store, buffer) => {
     const [last] = store.slice(-1);
 
     if (last?.type === KeyType.action) {
@@ -34,7 +34,7 @@ export const useCalculator = makeCalculator(
   }),
   makeKeyHandler("=", (item, store, buffer) => {
     if (store.length) {
-      const result = interpreter(store.map((item) => item.key));
+      const result = interpreter(store);
       store = [createItem(result, KeyType.number)];
       buffer = result.toString();
     }
@@ -87,6 +87,30 @@ export const useCalculator = makeCalculator(
       }
 
       store.push(createItem(buffer, KeyType.number));
+    }
+
+    return {
+      sequence: store,
+      buffer,
+    };
+  }),
+  makeKeyHandler(".", (item, store, buffer) => {
+    const [last] = store.slice(-1);
+
+    if (last.type === KeyType.number && !last.key.includes(".")) {
+      last.key += ".";
+    }
+
+    return {
+      sequence: store,
+      buffer,
+    };
+  }),
+  makeKeyHandler("%", (item, store, buffer) => {
+    const [last] = store.slice(-1);
+
+    if (last.type === KeyType.number) {
+      last.modifier = "percent";
     }
 
     return {
