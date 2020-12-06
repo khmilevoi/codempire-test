@@ -2,7 +2,7 @@ import React from "react";
 import {
   ButtonGroupContainer,
   ButtonSubgroupContainer,
-} from "../styles/calculator";
+} from "../styles/calculator.styles";
 
 export type ButtonGroupProps = {};
 

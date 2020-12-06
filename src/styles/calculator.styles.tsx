@@ -23,10 +23,16 @@ export const DisplayContainer = styled.View`
   justify-content: flex-end;
 `;
 
+export const DisplayScroll = styled.ScrollView`
+  transform: rotateY(180deg);
+`;
+
 export const DisplayContent = styled.Text`
   color: white;
   font-size: ${({ size }) => size * 0.4}px;
   text-align: right;
+
+  transform: rotateY(180deg);
 `;
 
 // button

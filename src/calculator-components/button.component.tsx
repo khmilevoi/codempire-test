@@ -4,7 +4,7 @@ import {
   ButtonContainer,
   ButtonInner,
   ButtonLabel,
-} from "../styles/calculator";
+} from "../styles/calculator.styles";
 
 export type ButtonProps = {
   cols?: number;

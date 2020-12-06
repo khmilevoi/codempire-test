@@ -51,7 +51,7 @@ export const useCalculator = makeCalculator(
   makeKeyHandler("tsign", (item, store, buffer) => {
     const [last] = store.slice(-1);
 
-    if (last.type === KeyType.number) {
+    if (last?.type === KeyType.number) {
       last.key = (-last.key).toString();
     }
 
@@ -97,7 +97,7 @@ export const useCalculator = makeCalculator(
   makeKeyHandler(".", (item, store, buffer) => {
     const [last] = store.slice(-1);
 
-    if (last.type === KeyType.number && !last.key.includes(".")) {
+    if (last && last.type === KeyType.number && !last.key.includes(".")) {
       last.key += ".";
     }
 
@@ -109,7 +109,7 @@ export const useCalculator = makeCalculator(
   makeKeyHandler("%", (item, store, buffer) => {
     const [last] = store.slice(-1);
 
-    if (last.type === KeyType.number) {
+    if (last?.type === KeyType.number) {
       last.modifier = "percent";
     }
 

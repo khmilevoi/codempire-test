@@ -8,7 +8,7 @@ export const interpreter = (sequence: CalculationSequence) => {
   const accept = (...tokens: string[]) => tokens.includes(peek()?.key);
   const calc = (token: string, f: () => any) => accept(token) && get() && f();
 
-  const isPercent = (item: CalculationItem) => item.modifier === "percent";
+  const isPercent = (item: CalculationItem) => item?.modifier === "percent";
   const isNumber = (num: CalculationItem) => !Number.isNaN(Number(num?.key));
   const number = () => Number.parseFloat(get()?.key);
 

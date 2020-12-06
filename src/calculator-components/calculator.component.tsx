@@ -3,7 +3,10 @@ import { Dimensions, StatusBar } from "react-native";
 import { useCalculator } from "../calculator-logic/calculator-instance.hook";
 import { KeyType } from "../calculator-logic/types";
 import { ButtonColors, ButtonSize } from "../shared/constants";
-import { ButtonsWrapper, CalculatorContainer } from "../styles/calculator";
+import {
+  ButtonsWrapper,
+  CalculatorContainer,
+} from "../styles/calculator.styles";
 import { Button } from "./button.component";
 import { Display } from "./display-component";
 import { ButtonGroup, ButtonSubgroup } from "./group.component";
@@ -35,7 +38,7 @@ export const Calculator = () => {
         .map((item) => {
           if (item.type === KeyType.number) {
             const key = Number.parseFloat(item.key);
-            let keyString = key.toString();
+            let keyString = item.key;
 
             if (item.modifier === "percent") {
               keyString += "%";
